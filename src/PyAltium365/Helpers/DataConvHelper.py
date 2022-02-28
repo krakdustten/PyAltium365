@@ -3,7 +3,7 @@ import re
 from datetime import datetime
 from typing import Any, TypeVar, Union, Tuple, no_type_check, Type
 
-from pyaltium365.Exceptions import DataException
+from PyAltium365.Exceptions import DataException
 
 T = TypeVar('T')
 

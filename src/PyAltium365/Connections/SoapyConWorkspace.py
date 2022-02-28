@@ -1,16 +1,16 @@
 from typing import TYPE_CHECKING, List
-from pyaltium365.Connections.ConnectionExceptions import InternalConnectionException
-from pyaltium365.Connections.SoapyCon import SoapyCon
-from pyaltium365.Data.DataConWorkspace import UserWorkspace
-from pyaltium365.Exceptions import DataException, ConnectionException
-from pyaltium365.Helpers.DataConvHelper import convert_data_to_type
-from pyaltium365.Helpers.DictListHelper import get_from_dict_and_check_type
+from PyAltium365.Connections.ConnectionExceptions import InternalConnectionException
+from PyAltium365.Connections.SoapyCon import SoapyCon
+from PyAltium365.Data.DataConWorkspace import UserWorkspace
+from PyAltium365.Exceptions import DataException, ConnectionException
+from PyAltium365.Helpers.DataConvHelper import convert_data_to_type
+from PyAltium365.Helpers.DictListHelper import get_from_dict_and_check_type
 from requests import Session
 
 if TYPE_CHECKING:
-    from pyaltium365.AltiumApi import AltiumApi
+    from PyAltium365.AltiumApi import AltiumApi
 else:
-    from pyaltium365.Fix import AltiumApi
+    from PyAltium365.Fix import AltiumApi
 
 
 class SoapyConWorkspace(SoapyCon):

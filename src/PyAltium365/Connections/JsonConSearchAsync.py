@@ -1,13 +1,13 @@
 from typing import TYPE_CHECKING, Dict, Any
-from pyaltium365.Connections.JsonCon import JsonCon
-from pyaltium365.Data.DataConSearchAsync import AsyncSearchObject, SearchType
+from PyAltium365.Connections.JsonCon import JsonCon
+from PyAltium365.Data.DataConSearchAsync import AsyncSearchObject, SearchType
 from requests import Session
 
 
 if TYPE_CHECKING:
-    from pyaltium365.AltiumApi import AltiumApi
+    from PyAltium365.AltiumApi import AltiumApi
 else:
-    from pyaltium365.Fix import AltiumApi
+    from PyAltium365.Fix import AltiumApi
 
 
 class JsonConSearchAsync(JsonCon):

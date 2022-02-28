@@ -3,14 +3,14 @@ from datetime import datetime
 from enum import Enum
 from typing import TYPE_CHECKING, List, Dict, Union
 
-from pyaltium365.Exceptions import DataException
-from pyaltium365.Helpers.DataClassDict import dataclassdict, field_dict
-from pyaltium365.Helpers.DictListHelper import get_from_dict_and_check_type
+from PyAltium365.Exceptions import DataException
+from PyAltium365.Helpers.DataClassDict import dataclassdict, field_dict
+from PyAltium365.Helpers.DictListHelper import get_from_dict_and_check_type
 
 if TYPE_CHECKING:
-    from pyaltium365.AltiumApi import AltiumApi
+    from PyAltium365.AltiumApi import AltiumApi
 else:
-    from pyaltium365.Fix import AltiumApi
+    from PyAltium365.Fix import AltiumApi
 
 
 class DiscoveryLoginOption(Enum):

@@ -3,13 +3,13 @@ from datetime import datetime
 from enum import Enum
 from typing import TYPE_CHECKING, Optional
 
-from pyaltium365.Data.DataConPortal import Account
-from pyaltium365.Helpers.DataClassDict import dataclassdict, field_dict
+from PyAltium365.Data.DataConPortal import Account
+from PyAltium365.Helpers.DataClassDict import dataclassdict, field_dict
 
 if TYPE_CHECKING:
-    from pyaltium365.AltiumApi import AltiumApi
+    from PyAltium365.AltiumApi import AltiumApi
 else:
-    from pyaltium365.Fix import AltiumApi
+    from PyAltium365.Fix import AltiumApi
 
 
 class ServiceDiscoverProductName(Enum):

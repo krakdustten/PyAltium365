@@ -1,7 +1,7 @@
 from typing import TypeVar, Dict, Union, Type
 
-from pyaltium365.Exceptions import DataException
-from pyaltium365.Helpers.DataConvHelper import convert_data_to_type
+from PyAltium365.Exceptions import DataException
+from PyAltium365.Helpers.DataConvHelper import convert_data_to_type
 
 T = TypeVar('T')
 U = TypeVar('U')

@@ -1,7 +1,7 @@
-from pyaltium365.AltiumApi import AltiumApi
-from pyaltium365.Connections.JsonConSearchAsync import JsonConSearchAsync
-from pyaltium365.Data.DataConPortal import PrtGlobalServiceName, PrtSettings
-from pyaltium365.Data.DataConSearchAsync import AsyncSearchObject, DataType, SearchDataType
+from PyAltium365.AltiumApi import AltiumApi
+from PyAltium365.Connections.JsonConSearchAsync import JsonConSearchAsync
+from PyAltium365.Data.DataConPortal import PrtGlobalServiceName, PrtSettings
+from PyAltium365.Data.DataConSearchAsync import AsyncSearchObject, DataType, SearchDataType
 
 api = AltiumApi()
 

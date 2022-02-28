@@ -1,15 +1,15 @@
 from typing import TYPE_CHECKING, Optional, List
-from pyaltium365.Connections.ConnectionExceptions import InternalConnectionException
-from pyaltium365.Connections.SoapyCon import SoapyCon
-from pyaltium365.Data.DataConVault import AluVault, AluItem, AluTag, AluLifeCycleState, AluItemRevision, AluLifeCycleDefinition, AluLifeCycleStateChange, \
+from PyAltium365.Connections.ConnectionExceptions import InternalConnectionException
+from PyAltium365.Connections.SoapyCon import SoapyCon
+from PyAltium365.Data.DataConVault import AluVault, AluItem, AluTag, AluLifeCycleState, AluItemRevision, AluLifeCycleDefinition, AluLifeCycleStateChange, \
     AluLifeCycleStateTransition
-from pyaltium365.Exceptions import DataException, ConnectionException
+from PyAltium365.Exceptions import DataException, ConnectionException
 from requests import Session
 
 if TYPE_CHECKING:
-    from pyaltium365.AltiumApi import AltiumApi
+    from PyAltium365.AltiumApi import AltiumApi
 else:
-    from pyaltium365.Fix import AltiumApi
+    from PyAltium365.Fix import AltiumApi
 
 
 class SoapyConVault(SoapyCon):

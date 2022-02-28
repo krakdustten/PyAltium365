@@ -1,19 +1,19 @@
 from typing import Dict, Any, Union, Optional, List
 
 import requests
-from pyaltium365.Connections.JsonConSearchAsync import JsonConSearchAsync
-from pyaltium365.Connections.SoapyConPortal import SoapyConPortal
-from pyaltium365.Connections.SoapyConServiceDiscovery import SoapyConServiceDiscovery
-from pyaltium365.Connections.SoapyConVault import SoapyConVault
-from pyaltium365.Connections.SoapyConWorkspace import SoapyConWorkspace
-from pyaltium365.Data.DataConPortal import User, PrtGlobalServiceName, PrtSettings, Account
-from pyaltium365.Data.DataConSearchAsync import AsyncSearchObject
-from pyaltium365.Data.DataConServiceDiscovery import ServiceEndpoints
-from pyaltium365.Data.DataConVault import AluItem, AluLifeCycleDefinition, AluItemRevision, AluLifeCycleState, AluLifeCycleStateChange, \
+from PyAltium365.Connections.JsonConSearchAsync import JsonConSearchAsync
+from PyAltium365.Connections.SoapyConPortal import SoapyConPortal
+from PyAltium365.Connections.SoapyConServiceDiscovery import SoapyConServiceDiscovery
+from PyAltium365.Connections.SoapyConVault import SoapyConVault
+from PyAltium365.Connections.SoapyConWorkspace import SoapyConWorkspace
+from PyAltium365.Data.DataConPortal import User, PrtGlobalServiceName, PrtSettings, Account
+from PyAltium365.Data.DataConSearchAsync import AsyncSearchObject
+from PyAltium365.Data.DataConServiceDiscovery import ServiceEndpoints
+from PyAltium365.Data.DataConVault import AluItem, AluLifeCycleDefinition, AluItemRevision, AluLifeCycleState, AluLifeCycleStateChange, \
     AluLifeCycleStateTransition
-from pyaltium365.Data.DataConWorkspace import UserWorkspace
-from pyaltium365.Helpers.DataConvHelper import convert_data_to_type
-from pyaltium365.Helpers.GeneralHelper import ReturnOnException
+from PyAltium365.Data.DataConWorkspace import UserWorkspace
+from PyAltium365.Helpers.DataConvHelper import convert_data_to_type
+from PyAltium365.Helpers.GeneralHelper import ReturnOnException
 
 
 class AltiumApi:

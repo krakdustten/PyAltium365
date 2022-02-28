@@ -1,8 +1,8 @@
 from typing import List, Dict, Union, Any, Optional, Tuple
 
-from pyaltium365.Connections.ConnectionExceptions import InternalConnectionException, ElementItemNotFoundException
-from pyaltium365.Exceptions import DataException
-from pyaltium365.Helpers.DataConvHelper import convert_data_to_type
+from PyAltium365.Connections.ConnectionExceptions import InternalConnectionException, ElementItemNotFoundException
+from PyAltium365.Exceptions import DataException
+from PyAltium365.Helpers.DataConvHelper import convert_data_to_type
 from requests import Session
 
 import xml.etree.ElementTree as ET

@@ -3,13 +3,13 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import List, Dict, Tuple, Union, TYPE_CHECKING, Optional
-from pyaltium365.Connections import JsonConSearchAsync
-from pyaltium365.Data.DataConVault import AluItem
+from PyAltium365.Connections import JsonConSearchAsync
+from PyAltium365.Data.DataConVault import AluItem
 
 if TYPE_CHECKING:
-    from pyaltium365.AltiumApi import AltiumApi
+    from PyAltium365.AltiumApi import AltiumApi
 else:
-    from pyaltium365.Fix import AltiumApi
+    from PyAltium365.Fix import AltiumApi
 
 
 class SearchType(Enum):

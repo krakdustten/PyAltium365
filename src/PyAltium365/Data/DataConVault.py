@@ -1,13 +1,13 @@
 from dataclasses import dataclass
 from datetime import datetime
 from typing import TYPE_CHECKING, Optional, List
-from pyaltium365.Helpers.DataClassDict import dataclassdict, field_dict
+from PyAltium365.Helpers.DataClassDict import dataclassdict, field_dict
 
 if TYPE_CHECKING:
-    from pyaltium365.AltiumApi import AltiumApi
+    from PyAltium365.AltiumApi import AltiumApi
 else:
-    from pyaltium365.Fix import AltiumApi
-    from pyaltium365.Data.DataConVaultPredef import AluLifeCycleDefinition, AluItemRevision, AluLifeCycleStateChange, AluLifeCycleStateTransition
+    from PyAltium365.Fix import AltiumApi
+    from PyAltium365.Data.DataConVaultPredef import AluLifeCycleDefinition, AluItemRevision, AluLifeCycleStateChange, AluLifeCycleStateTransition
 
 
 @dataclass
