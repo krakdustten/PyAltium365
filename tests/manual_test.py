@@ -5,9 +5,9 @@ from PyAltium365.Data.DataConSearchAsync import AsyncSearchObject, DataType, Sea
 
 api = AltiumApi()
 
-api.login("email", "pass")
+api.login("dylan.gybels@magics.tech", "Ms1s8r0nAm")
 workspaces = api.get_user_workspaces()
-api.workspace_login(workspaces[0], "email", "pass")
+api.workspace_login(workspaces[0], "dylan.gybels@magics.tech", "Ms1s8r0nAm")
 
 so = api.create_search_object()
 #so.add_search_parameter_range("Value", 1e-10, 3e-10, DataType.CAPACITANCE, True, True)
@@ -32,10 +32,10 @@ item = results[0].get_item()
 
 lcd = item.get_life_cycle_definition()
 item_r = item.get_latest_item_revision()
-state_ch = item_r.get_possible_life_cycle_state_transitions()[0]
-print(item_r.change_life_cycle_state(state_ch))
 
-print(results)
+url = item_r.download("temp")
+
+print(url)
 
 # headers = {
 #     'Accept': 'application/json',

@@ -1,4 +1,6 @@
+import os
 from typing import Dict, Any, Union, Optional, List
+from urllib.parse import urlparse
 
 import requests
 from PyAltium365.Connections.JsonConSearchAsync import JsonConSearchAsync
@@ -170,3 +172,23 @@ class AltiumApi:
             lcst.append(life_cycle_transition[ind].GUID)
             lcsag.append(life_cycle_transition[ind].LifeCycleStateAfterGUID)
         return self._service_vault.add_alu_life_cycle_state_changes(self._seswork_guid, irg, lcst, lcsag)
+
+    @ReturnOnException(None)
+    def download_item_revision(self, item_revision: AluItemRevision, path: str, rename: Optional[str] = None) -> Optional[str]:
+        if self._service_vault is None or self._seswork_guid is None:
+            return None
+        url = self._service_vault.get_alu_item_revision_download_urls(self._seswork_guid, [item_revision.GUID])[0]
+
+        if rename is None:
+            rename = os.path.basename(urlparse(url).path)
+        if not rename.endswith(".zip"):
+            rename = rename + ".zip"
+        full_path = os.path.join(path, rename)
+        if not os.path.exists(path):
+            os.makedirs(path)
+        r = self._session.get(url, stream=True)
+        with open(full_path, 'wb') as f:
+            for chunk in r.iter_content(1024):
+                f.write(chunk)
+
+        return full_path

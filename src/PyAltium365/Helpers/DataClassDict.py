@@ -170,7 +170,6 @@ def _gen_from_dict_function(cls, cls_fields, check_parameter_sub_list=()):
                 body += f'   self.{field.name} = self._convert_data_to_type(items[\'{d_name}\'], {field.type.__name__}, "{field.dict_conv_str}")\n'
 
     if len(check_parameter_sub_list) == 3:
-        body += '  print("Test")\n'
         path, name, value = check_parameter_sub_list
         if type(path) is str:
             path = [path]

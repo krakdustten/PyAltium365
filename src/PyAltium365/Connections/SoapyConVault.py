@@ -208,3 +208,26 @@ class SoapyConVault(SoapyCon):
             return True
         except (InternalConnectionException, DataException):
             return False
+
+    def get_alu_item_revision_download_urls(self, seswork_guid: str, item_revision_guid: List[str]) -> List[str]:
+        try:
+            head = None
+            body = self._gen_generic_tag_start("ItemRevisionGUIDList")
+            for item_rev in item_revision_guid:
+                body += self._gen_generic_tag("item", item_rev)
+            body += self._gen_generic_tag_end()
+            body += self._gen_generic_tag("SessionHandle", seswork_guid)
+            body += self._gen_generic_tag_start("Options")
+            body += self._gen_generic_tag("item", "GetDirectLinks=true")
+            body += self._gen_generic_tag_end()
+
+            resp = self._send_command("GetALU_ItemRevisionDownloadURLs", head, body)
+            self._check_method_result(resp, ['Body', 'GetALU_ItemRevisionDownloadURLsResponse', 'MethodResult'])
+            items = self._convert_et_to_dict(self._get_elm_by_path(resp, ['Body', 'GetALU_ItemRevisionDownloadURLsResponse', 'MethodResult', 'Results'], True), True)
+            li = []
+            for item in items['item'] if type(items['item']) is list else [items['item']]:
+                if 'URL' in item:
+                    li.append(item['URL'])
+            return li
+        except (InternalConnectionException, DataException):
+            return []

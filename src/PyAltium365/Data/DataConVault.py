@@ -141,6 +141,9 @@ class AluItemRevision(AluBase):
     def change_life_cycle_state(self, life_cycle_transition: AluLifeCycleStateTransition) -> bool:
         return self.altium_api.change_life_cycle_state([self], [life_cycle_transition])
 
+    def download(self, path: str, rename: Optional[str] = None) -> Optional[str]:
+        return self.altium_api.download_item_revision(self, path, rename)
+
 
 @dataclass
 @dataclassdict
