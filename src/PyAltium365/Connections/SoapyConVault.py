@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Optional, List
 from PyAltium365.Connections.ConnectionExceptions import InternalConnectionException
 from PyAltium365.Connections.SoapyCon import SoapyCon
 from PyAltium365.Data.DataConVault import AluVault, AluItem, AluTag, AluLifeCycleState, AluItemRevision, AluLifeCycleDefinition, AluLifeCycleStateChange, \
-    AluLifeCycleStateTransition
+    AluLifeCycleStateTransition, AluItemRevisionLink
 from PyAltium365.Exceptions import DataException, ConnectionException
 from requests import Session
 
@@ -231,3 +231,21 @@ class SoapyConVault(SoapyCon):
             return li
         except (InternalConnectionException, DataException):
             return []
+
+    def get_alu_item_revision_links(self, seswork_guid: str, filter: Optional[str] = None) -> List[AluItemRevisionLink]:
+        try:
+            head = None
+            body = self._gen_generic_tag("SessionHandle", seswork_guid)
+            if filter is not None:
+                body += self._gen_generic_tag("Filter", filter)
+
+            resp = self._send_command("GetALU_ItemRevisionLinks", head, body)
+
+            self._check_method_result(resp, ['Body', 'GetALU_ItemRevisionLinksResponse', 'MethodResult'])
+            items = self._convert_et_to_dict(self._get_elm_by_path(resp, ['Body', 'GetALU_ItemRevisionLinksResponse', 'Records'], True), True)
+            li = []
+            for item in items['item'] if type(items['item']) is list else [items['item']]:
+                li.append(AluItemRevisionLink(self._altium_api).from_dict(item))  # type: ignore
+            return li
+        except (InternalConnectionException, DataException):
+            raise ConnectionException()

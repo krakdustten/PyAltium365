@@ -1,3 +1,4 @@
+from abc import ABC
 from dataclasses import dataclass
 from datetime import datetime
 from typing import TYPE_CHECKING, Optional, List
@@ -144,6 +145,12 @@ class AluItemRevision(AluBase):
     def download(self, path: str, rename: Optional[str] = None) -> Optional[str]:
         return self.altium_api.download_item_revision(self, path, rename)
 
+    def get_child_item_revisions(self) -> List[AluItemRevision]:
+        return self.altium_api.get_child_item_revisions_from_item_revision(self)
+
+    def get_parent_item_revisions(self) -> List[AluItemRevision]:
+        return self.altium_api.get_parent_item_revisions_from_item_revision(self)
+
 
 @dataclass
 @dataclassdict
@@ -192,3 +199,19 @@ class AluLifeCycleStateTransition(AluBase):
 
     def get_life_cycle_definition(self) -> Optional[AluLifeCycleDefinition]:
         return self.altium_api.get_life_cycle_definition_from_guid(self.LifeCycleDefinitionGUID)
+
+
+@dataclass
+@dataclassdict
+class AluItemRevisionLink(AluBase):
+    CreatedByName: str = field_dict(dict_name=["CreatedByName"], default=None)
+    ChildItemRevisionGUID: str = field_dict(dict_name=["ChildItemRevisionGUID"], default=None)
+    ChildVaultGUID: str = field_dict(dict_name=["ChildVaultGUID"], default=None)
+    ParentItemRevisionGUID: str = field_dict(dict_name=["ParentItemRevisionGUID"], default=None)
+    ParentVaultGUID: str = field_dict(dict_name=["ParentVaultGUID"], default=None)
+
+    def get_parent_item(self) -> Optional[AluItemRevision]:
+        return self.altium_api.get_item_revision_from_guid(self.ParentItemRevisionGUID)
+
+    def get_child_item(self) -> Optional[AluItemRevision]:
+        return self.altium_api.get_item_revision_from_guid(self.ChildItemRevisionGUID)

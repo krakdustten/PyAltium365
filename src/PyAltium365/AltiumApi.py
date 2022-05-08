@@ -12,7 +12,7 @@ from PyAltium365.Data.DataConPortal import User, PrtGlobalServiceName, PrtSettin
 from PyAltium365.Data.DataConSearchAsync import AsyncSearchObject
 from PyAltium365.Data.DataConServiceDiscovery import ServiceEndpoints
 from PyAltium365.Data.DataConVault import AluItem, AluLifeCycleDefinition, AluItemRevision, AluLifeCycleState, AluLifeCycleStateChange, \
-    AluLifeCycleStateTransition
+    AluLifeCycleStateTransition, AluItemRevisionLink
 from PyAltium365.Data.DataConWorkspace import UserWorkspace
 from PyAltium365.Helpers.DataConvHelper import convert_data_to_type
 from PyAltium365.Helpers.GeneralHelper import ReturnOnException
@@ -159,6 +159,33 @@ class AltiumApi:
         if self._service_vault is None or self._seswork_guid is None:
             return []
         return self._service_vault.get_alu_life_cycle_state_transitions(self._seswork_guid, f"LifeCycleStateBeforeGUID = '{item_revision.LifeCycleStateGUID}'")
+
+    @ReturnOnException([])
+    def get_item_revision_link_from_item_revision(self, item_revision: AluItemRevision, child: bool = True) -> List[AluItemRevisionLink]:
+        if self._service_vault is None or self._seswork_guid is None:
+            return []
+        filter = "ParentItemRevisionGUID" if child else "ChildItemRevisionGUID"
+        return self._service_vault.get_alu_item_revision_links(self._seswork_guid, f"{filter}='{item_revision.GUID}'")
+
+    @ReturnOnException([])
+    def get_child_item_revisions_from_item_revision(self, item_revision: AluItemRevision) -> List[AluItemRevision]:
+        lin = self.get_item_revision_link_from_item_revision(item_revision, True)
+        lout = []
+        for li in lin:
+            lou = self.get_item_revision_from_guid(li.ChildItemRevisionGUID)
+            if lou is not None:
+                lout.append(lou)
+        return lout
+
+    @ReturnOnException([])
+    def get_parent_item_revisions_from_item_revision(self, item_revision: AluItemRevision) -> List[AluItemRevision]:
+        lin = self.get_item_revision_link_from_item_revision(item_revision, False)
+        lout = []
+        for li in lin:
+            lou = self.get_item_revision_from_guid(li.ChildItemRevisionGUID)
+            if lou is not None:
+                lout.append(lou)
+        return lout
 
     @ReturnOnException(False)
     def change_life_cycle_state(self, item_revision: List[AluItemRevision], life_cycle_transition: List[AluLifeCycleStateTransition]) -> bool:

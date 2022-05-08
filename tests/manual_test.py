@@ -11,7 +11,7 @@ api.workspace_login(workspaces[0], "dylan.gybels@magics.tech", "Ms1s8r0nAm")
 
 so = api.create_search_object()
 #so.add_search_parameter_range("Value", 1e-10, 3e-10, DataType.CAPACITANCE, True, True)
-so.add_search_content_type(SearchDataType.SCHEMATIC_TEMPLATE)
+so.add_search_content_type(SearchDataType.COMPONENT)
 so.add_search_parameter("LatestRevision", "1")
 #so.add_search_parameter("FolderFullPath", "Components\\Miscellaneous\\")
 # so.add_search_parameter("ContentType", "layerstack")
@@ -19,23 +19,24 @@ so.add_search_parameter("LatestRevision", "1")
 print(so.get_current_count())
 # p = so.get_all_search_names()
 # print(p)
-temp = api._service_vault.get_alu_items(api._seswork_guid)
-results = so.get_results(0)
-temp = {}
-for result in results:
-    for param in result.Parameters:
-        if param in temp:
-            temp[param] += 1
-        else:
-            temp[param] = 1
-item = results[0].get_item()
+# temp = api._service_vault.get_alu_items(api._seswork_guid)
+results = so.get_results(10)
+# temp = {}
+# for result in results:
+#     for param in result.Parameters:
+#         if param in temp:
+#             temp[param] += 1
+#         else:
+#             temp[param] = 1
+item = results[1].get_item()
 
 lcd = item.get_life_cycle_definition()
 item_r = item.get_latest_item_revision()
 
-url = item_r.download("temp")
+l = item_r.get_child_item_revisions()
 
-print(url)
+print(item.HRID)
+print(l)
 
 # headers = {
 #     'Accept': 'application/json',
