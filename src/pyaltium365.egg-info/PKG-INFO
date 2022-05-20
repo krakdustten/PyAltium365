@@ -1,0 +1,24 @@
+Metadata-Version: 2.1
+Name: PyAltium365
+Version: 0.0.3
+Summary: an library that can interface with altium 365
+Home-page: UNKNOWN
+Author: Dylan Gybels
+Author-email: GybelsDylan@gmail.com
+License: MIT
+Platform: unix
+Platform: linux
+Platform: osx
+Platform: cygwin
+Platform: win32
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Provides-Extra: testing
+License-File: LICENSE
+
+UNKNOWN
+
