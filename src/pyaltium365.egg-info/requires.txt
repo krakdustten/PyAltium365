@@ -1,4 +1,5 @@
 requests>=2
+pydantic>=1.8.2
 
 [testing]
 pytest>=6.0
