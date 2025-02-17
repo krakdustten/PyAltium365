@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope/">
+    <soap:Body>
+        <LoginResponse xmlns="https://www.company.com/co">
+            <LoginResult xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+                <Success>Wauw</Success>
+            </LoginResult>
+        </LoginResponse>
+    </soap:Body>
+</soap:Envelope>

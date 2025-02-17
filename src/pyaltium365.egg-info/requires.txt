@@ -1,9 +1,0 @@
-requests>=2
-pydantic>=1.8.2
-
-[testing]
-pytest>=6.0
-pytest-cov>=2.0
-mypy>=0.910
-flake8>=5.0.0
-tox>=4.2

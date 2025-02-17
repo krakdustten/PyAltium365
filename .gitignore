@@ -1,2 +1,27 @@
-/venv/
-/.tox/
+# IDE
+/.idea/
+/.venv/
+
+# Testing (coverage)
+/.nox/
+*.egg-info/
+/htmlcov/
+.coverage
+coverage.xml
+
+
+# Documentation
+/build/
+
+# Compiled package
+/dist/
+
+# Others
+**/__pycache__/
+.env
+
+
+
+
+
+

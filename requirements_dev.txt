@@ -1,7 +1,0 @@
-flake8 >= 5.0.0
-tox
-pytest
-pytest-cov
-mypy
-lxml
-types-requests
