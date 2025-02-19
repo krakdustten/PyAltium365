@@ -162,15 +162,15 @@ class SoapyConPortal(SoapyCon):
         """
         if handle is None and service == service.is_guid_req:  # type: ignore
             raise ValueError(f"Handle is required for {service.name} service")
-        if not service.is_guid_req:  # type: ignore
+        if not service.is_guid_req:
             handle = None
 
         response = self._send_command(
             SoapHeaderApi(),
             SoapMethodGetPrtGlobalServiceUrl(
                 handle=handle,
-                service_name=service.service_name,  # type: ignore
-                set_name=service.set_name,  # type: ignore
+                service_name=service.service_name,
+                set_name=service.set_name,
             ),
             return_method=SoapGetPrtGlobalServiceUrlResponse,
         )

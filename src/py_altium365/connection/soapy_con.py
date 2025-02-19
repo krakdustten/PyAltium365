@@ -76,7 +76,6 @@ class SoapyCon:
 
     ReturnMethodT = TypeVar("ReturnMethodT", bound=SoapMethod)
 
-    # pylint: disable=too-many-arguments, too-many-positional-arguments
     @typing.no_type_check
     def _send_command(
         self, header: Optional[SoapHeader], method: SoapMethod, return_method: ReturnMethodT, soap_action: Optional[str] = None, return_header=SoapHeader
@@ -113,12 +112,8 @@ class SoapyCon:
             "SOAPAction": soap_action,
             "User-Agent": "Altium Designer",
         }
-        print("Sending request:" + self._url)
-        print(envelope.to_xml(encoding="UTF-8"))
-        print(headers)
-        response = self._session.post(self._url, data=envelope.to_xml(encoding="UTF-8"), headers=headers)
 
-        print("Response:" + response.text)
+        response = self._session.post(self._url, data=envelope.to_xml(encoding="UTF-8"), headers=headers)
 
         if response.status_code != 200:
             raise ConnectionError(f'Failed to send "{soap_action}" command!')

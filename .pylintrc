@@ -3,7 +3,11 @@
 # Maximum number of characters on a single line.
 max-line-length=160
 
+# Maximum allowed arguments for a function
+max-args = 6
+
 
 [MASTER]
 disable=
     C0114,  # Missing module docstring
+    R0917,  # Too many positional arguments
