@@ -2,6 +2,7 @@ from typing import List, Optional, Union
 
 from py_altium365.base.enums import PrtGlobalService
 from py_altium365.connection.soapy_con_portal import SoapyConPortal
+from py_altium365.connection.soapy_con_service_discovery import SoapyConServiceDiscovery
 from py_altium365.connection.soapy_con_workspace import (
     SoapyConWorkspace,
     UserWorkspaceInfo,
@@ -19,12 +20,14 @@ class AltiumApi:
         """
 
         # Global variables
+
         self._portal_con: SoapyConPortal = SoapyConPortal(self)
         self._session_guid: Optional[str] = None
         self._service_urls: dict[str, str] = {}
         self._workspace_con: Optional[SoapyConWorkspace] = None
 
         # Workspace variables
+        self._service_discovery_con: Optional[SoapyConServiceDiscovery] = None
 
     def login(self, username: str, password: str, return_message: bool = False) -> Union[str, bool]:
         """
@@ -34,14 +37,13 @@ class AltiumApi:
         :param return_message: If the login fails, return the message
         :return: True if the login was successful, False otherwise or the message if return_message is True
         """
-        user_login = self._portal_con.login_user(username, password)
-        if not user_login.success:
-            if return_message and user_login.message is not None:
-                return user_login.message
-            return False
-        self._session_guid = user_login.session_handle
-
         try:
+            user_login = self._portal_con.login_user(username, password)
+            if not user_login.success:
+                if return_message and user_login.message is not None:
+                    return user_login.message
+                return False
+            self._session_guid = user_login.session_handle
             self._workspace_con = SoapyConWorkspace(self)
         except ConnectionError:
             return False
@@ -67,7 +69,9 @@ class AltiumApi:
             workspace = workspace.hosting_url
         if not isinstance(workspace, str):
             return False
-        # TODO: Implement workspace login
+        # ODO: Implement workspace login
+        self._service_discovery_con = SoapyConServiceDiscovery(workspace)
+        self._service_discovery_con.login(username, password)
         return True
 
     def get_service_url(self, service: PrtGlobalService, force_request: bool = False) -> Optional[str]:

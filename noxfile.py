@@ -6,7 +6,7 @@ import nox
 
 load_dotenv()
 
-nox.options.reuse_existing_virtualenvs = True
+nox.options.reuse_existing_virtualenvs = False
 #nox.options.sessions = ['build']
 
 

@@ -13,7 +13,12 @@ class SoapHeader(
     """Base class for SOAP header."""
 
 
-class SoapMethod(BaseXmlModel):
+class SoapMethod(
+    BaseXmlModel,
+    tag="Method",
+    ns="",
+    nsmap={"": "http://tempuri.org/"},
+):
     """Base class for SOAP method."""
 
 
@@ -35,6 +40,20 @@ HeaderTypeT = TypeVar("HeaderTypeT", bound=SoapHeader)
 BodyTypeT = TypeVar("BodyTypeT", bound=SoapBody)
 
 
+class SoapEnvelopeNoHeader(
+    BaseXmlModel,
+    Generic[BodyTypeT],
+    tag="Envelope",
+    ns="soap",
+    nsmap={
+        "soap": "http://schemas.xmlsoap.org/soap/envelope/",
+    },
+):
+    """SOAP envelope."""
+
+    body: BodyTypeT
+
+
 class SoapEnvelope(
     BaseXmlModel,
     Generic[HeaderTypeT, BodyTypeT],
@@ -46,11 +65,15 @@ class SoapEnvelope(
 ):
     """SOAP envelope."""
 
-    header: Optional[HeaderTypeT] = element(default=None)
+    header: HeaderTypeT = element(default=None)
     body: BodyTypeT
 
 
-class SoapResponse(SoapMethod):
+class SoapResponse(
+    SoapMethod,
+    tag="Response",
+    ns="",
+):
     """Base class for SOAP response."""
 
     message: Optional[str] = element(
@@ -92,20 +115,35 @@ class SoapyCon:
         if soap_action is None:
             soap_action = method.__xml_tag__
 
-        request_shape = SoapEnvelope[
-            type(header),
-            SoapBody[type(method)],
-        ]
-        return_shape = SoapEnvelope[
-            return_header,
-            SoapBody[return_method],
-        ]
-        envelope = request_shape(
-            header=header,
-            body=SoapBody(
-                method=method,
-            ),
-        )
+        if header is None:
+            request_shape = SoapEnvelopeNoHeader[SoapBody[type(method)]]
+        else:
+            request_shape = SoapEnvelope[
+                type(header),
+                SoapBody[type(method)],
+            ]
+
+        if return_header is None:
+            return_shape = SoapEnvelopeNoHeader[return_method,]
+        else:
+            return_shape = SoapEnvelope[
+                return_header,
+                SoapBody[return_method],
+            ]
+
+        if header is None:
+            envelope = request_shape(
+                body=SoapBody(
+                    method=method,
+                ),
+            )
+        else:
+            envelope = request_shape(
+                header=header,
+                body=SoapBody(
+                    method=method,
+                ),
+            )
 
         headers = {
             "content-type": "text/xml",
