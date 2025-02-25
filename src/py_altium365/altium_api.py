@@ -1,5 +1,6 @@
 from typing import List, Optional, Union
 
+from py_altium365.altium_api_workspace import AltiumApiWorkspace
 from py_altium365.base.enums import PrtGlobalService
 from py_altium365.connection.soapy_con_portal import SoapyConPortal
 from py_altium365.connection.soapy_con_service_discovery import SoapyConServiceDiscovery
@@ -14,7 +15,7 @@ class AltiumApi:
     Altium API class
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Initialize the Altium API object
         """
@@ -51,7 +52,7 @@ class AltiumApi:
 
     def login_workspace(
         self, workspace: Union[UserWorkspaceInfo, str], username: str, password: str, return_message: bool = False, force_login: bool = False
-    ) -> Union[str, bool]:
+    ) -> Optional[AltiumApiWorkspace]:
         """
         Login to a workspace
         :param workspace: The url of the workspace or the UserWorkspaceInfo object
@@ -64,15 +65,17 @@ class AltiumApi:
         if self._session_guid is None or force_login:
             msg = self.login(username, password, return_message)
             if msg is not True:
-                return msg
+                return None
         if isinstance(workspace, UserWorkspaceInfo):
             workspace = workspace.hosting_url
         if not isinstance(workspace, str):
-            return False
+            return None
         # ODO: Implement workspace login
-        self._service_discovery_con = SoapyConServiceDiscovery(workspace)
-        self._service_discovery_con.login(username, password)
-        return True
+        service_discovery_con = SoapyConServiceDiscovery(workspace)
+        service_discovery_con.login(username, password)
+        if not service_discovery_con.user_info:
+            return None
+        return AltiumApiWorkspace(workspace, service_discovery_con)
 
     def get_service_url(self, service: PrtGlobalService, force_request: bool = False) -> Optional[str]:
         """

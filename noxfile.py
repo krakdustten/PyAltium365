@@ -48,6 +48,7 @@ def lint(session):
 @nox.session
 def type_check(session):
     session.install("-e", ".")  # Install the package in the virtualenv
+    session.install('-r', 'requirements-dev.txt')
     session.install('mypy')
     session.run('mypy', '--install-types', '--non-interactive')
     session.run('mypy', 'src', 'tests')

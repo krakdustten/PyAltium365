@@ -11,3 +11,4 @@ max-args = 6
 disable=
     C0114,  # Missing module docstring
     R0917,  # Too many positional arguments
+    R0903,  # Too few public methods TODO: remove this

@@ -3,3 +3,4 @@ pytest
 pytest-mock
 python-dotenv
 lxml-stubs
+types-requests

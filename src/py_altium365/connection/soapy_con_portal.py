@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 from datetime import datetime
-from typing import List, Optional
+from typing import TYPE_CHECKING, List, Optional
 
 from pydantic_xml import BaseXmlModel, element, wrapped
 
@@ -11,6 +13,9 @@ from py_altium365.connection.soapy_con import (
     SoapResponse,
     SoapyCon,
 )
+
+if TYPE_CHECKING:
+    from py_altium365.altium_api import AltiumApi
 
 
 class SoapHeaderApi(
@@ -130,7 +135,7 @@ class SoapGetPrtGlobalServiceUrlResponse(
 class SoapyConPortal(SoapyCon):
     """SOAP connection to the Altium portal."""
 
-    def __init__(self, altium_api):
+    def __init__(self, altium_api: AltiumApi) -> None:
         """
         Initialize the SOAP connection to the Altium portal.
         :param altium_api: The Altium API object.
