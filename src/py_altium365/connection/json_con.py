@@ -1,4 +1,4 @@
-from typing import Generic, TypeVar
+from typing import Generic, Type, TypeVar
 
 from pydantic import BaseModel
 from requests import Session
@@ -39,7 +39,7 @@ class JsonCon:
 
     ReturnMethodT = TypeVar("ReturnMethodT", bound=JsonReturn)
 
-    def _send_command(self, request: JsonRequest, return_method: ReturnMethodT) -> ReturnMethodT:
+    def _send_command(self, request: JsonRequest, return_method: Type[ReturnMethodT]) -> ReturnMethodT:
         headers = {
             "Accept": "application/json",
             "Authorization": f"AFSSessionID {self._session_guid}",

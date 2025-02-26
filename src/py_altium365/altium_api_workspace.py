@@ -19,13 +19,12 @@ class AltiumApiWorkspace:
         self._session_guid: str = service_discovery.user_info.session_id
         if self._service_discovery.service_urls.SEARCHBASE is None:
             raise ConnectionError("Failed to get search base URL")
-        self._service_search_async = JsonConSearchAsync(
-            self._service_discovery.service_urls.SEARCHBASE, self._session_guid, workspace_url.strip(":443").strip("https://")
-        )
 
-    def create_search_object(self):
+    def create_search_object(self) -> JsonConSearchAsync:
         """
         Create a search object
         :return:
         """
-        return self._service_search_async.get_search_interface()
+        if self._service_discovery.service_urls.SEARCHBASE is None:
+            raise ConnectionError("Failed to get search base URL")
+        return JsonConSearchAsync(self._service_discovery.service_urls.SEARCHBASE, self._session_guid, self._workspace_url.strip(":443").strip("https://"))

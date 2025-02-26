@@ -4,7 +4,7 @@
 max-line-length=160
 
 # Maximum allowed arguments for a function
-max-args = 6
+max-args = 8
 
 
 [MASTER]

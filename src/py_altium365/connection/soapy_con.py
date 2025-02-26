@@ -101,7 +101,12 @@ class SoapyCon:
 
     @typing.no_type_check
     def _send_command(
-        self, header: Optional[SoapHeader], method: SoapMethod, return_method: ReturnMethodT, soap_action: Optional[str] = None, return_header=SoapHeader
+        self,
+        header: Optional[SoapHeader],
+        method: SoapMethod,
+        return_method: typing.Type[ReturnMethodT],
+        soap_action: Optional[str] = None,
+        return_header=SoapHeader,
     ) -> ReturnMethodT:
         """
         Send a SOAP command
