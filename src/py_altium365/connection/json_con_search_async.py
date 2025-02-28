@@ -196,6 +196,25 @@ class SearchDataBase(BaseModel):
     content_type: str = Field(alias="ContentType", default="")
 
 
+class SearchDataType(str, Enum):
+    """Search data type."""
+
+    NO_TYPE = ""
+    COMPONENT = "Component"
+    FOOTPRINT = "Footprint"
+    SYMBOL = "Symbol"
+    DATASHEET = "Datasheet"
+    PROJECT_TEMPLATE = "Project Template"
+    SCHEMATIC_TEMPLATE = "Schematic Template"
+    COMPONENT_TEMPLATE = "Component Template"
+    SCIPT = "Script"
+    LAYERSTACK = "Layerstack"
+
+    @classmethod
+    def _missing_(cls, value):  # type: ignore
+        return FacedType.NO_TYPE
+
+
 NOT_COUNTED_SEARCH_PARAMETERS = [
     JsonFacetedCounter(FacetName="LatestRevision", faced_type=FacedType.NO_TYPE, TotalHitCount=0, Counters=[]),
     JsonFacetedCounter(FacetName="FolderFullPath", faced_type=FacedType.NO_TYPE, TotalHitCount=0, Counters=[]),
@@ -250,6 +269,9 @@ class JsonConSearchAsync(JsonCon):
                 value.append(v)
         if s_param is not None:
             self._search_parameters.remove(s_param)
+
+        if len(value) == 0:
+            return True
 
         querry_items = []
         occurance = 1 if len(value) > 1 else 0
@@ -307,7 +329,7 @@ class JsonConSearchAsync(JsonCon):
                 querry_item_first: JsonDtoSearchConditionBaseQuery = querry_item_base.items[0].item
                 if isinstance(querry_item_first, JsonDtoSearchConditionStrictQuery):
                     for item in querry_item_base.items:
-                        ret_val.append(item.item.term.Value)
+                        ret_val.append(item.item.term.value)
         return ret_val
 
     def get_all_search_parameters(self) -> Dict[str, List[str]]:
@@ -319,20 +341,23 @@ class JsonConSearchAsync(JsonCon):
         for search_param in self._search_parameters:
             querry_item_base: JsonDtoSearchConditionBaseQuery = search_param.item
             if isinstance(querry_item_base, JsonDtoSearchConditionStrictQuery):
-                ret_val[querry_item_base.term.field] = [querry_item_base.term.value]
+                name, _ = self._get_facet_name_and_type(querry_item_base.term.field)
+                ret_val[name] = [querry_item_base.term.value]
             elif isinstance(querry_item_base, JsonDtoSearchConditionBooleanQuery):
                 querry_item_first: JsonDtoSearchConditionBaseQuery = querry_item_base.items[0].item
                 if isinstance(querry_item_first, JsonDtoSearchConditionStrictQuery):
-                    ret_val[querry_item_first.term.field] = []
+                    name, _ = self._get_facet_name_and_type(querry_item_first.term.field)
+                    ret_val[name] = []
                     for item in querry_item_base.items:
-                        ret_val[querry_item_first.term.field].append(item.item.term.Value)
+                        ret_val[name].append(item.item.term.value)
         return ret_val
 
     def clear_search_parameters(self) -> None:
         """
         Clear all search parameters
         """
-        for search_param in self._search_parameters:
+        for i in range(len(self._search_parameters) - 1, -1, -1):
+            search_param = self._search_parameters[i]
             querry_item_base: JsonDtoSearchConditionBaseQuery = search_param.item
             if isinstance(querry_item_base, JsonDtoSearchConditionStrictQuery):
                 self._search_parameters.remove(search_param)
@@ -357,6 +382,29 @@ class JsonConSearchAsync(JsonCon):
                     return search_param
         return None
 
+    def add_content_search_parameter(self, value: Union[SearchDataType, List[SearchDataType]], remove_old: bool = False) -> bool:
+        """
+        Add a content search parameter
+        :param value: The content search parameter or a list of content search parameters
+        :param remove_old: Remove the old search parameters
+        :return: If the search parameter was added successfully
+        """
+        if not isinstance(value, List):
+            value = [value]
+        return self.add_search_parameter("ContentType", [v.value for v in value], FacedType.NO_TYPE, remove_old)
+
+    def remove_content_search_parameter(self, value: Union[SearchDataType, List[SearchDataType], None]) -> bool:
+        """
+        Remove a content search parameter
+        :param value: The content search parameter or a list of content search parameters to remove, if None all content search parameters are removed
+        :return: If the search parameter was removed successfully
+        """
+        if value is None:
+            return self.remove_search_parameter("ContentType", None, FacedType.NO_TYPE)
+        if not isinstance(value, List):
+            value = [value]
+        return self.remove_search_parameter("ContentType", [v.value for v in value], FacedType.NO_TYPE)
+
     def add_search_parameter_range(
         self, name: str, min_value: float, max_value: float, min_inclusive: bool = True, max_inclusive: bool = True, dtype: FacedType = FacedType.NO_TYPE
     ) -> bool:
@@ -370,6 +418,15 @@ class JsonConSearchAsync(JsonCon):
         :param dtype: The data type of the search parameter
         :return: If the search parameter was added
         """
+        counter: Optional[JsonFacetedCounter] = None
+        for c in self._search_counters:
+            if c.faced_name == name and c.faced_type == dtype:
+                counter = c
+                break
+        if counter is None:
+            return False
+        if not counter.support_range:
+            return False
         self.remove_search_parameter_range(name, dtype)
         full_name = self._get_index_name_from_name_and_type(name, dtype)
         s_param = JsonDtoSearchConditionBooleanQueryItem(
@@ -417,7 +474,8 @@ class JsonConSearchAsync(JsonCon):
         for search_param in self._search_parameters:
             querry_item_base: JsonDtoSearchConditionBaseQuery = search_param.item
             if isinstance(querry_item_base, JsonDtoSearchConditionRangeQuery):
-                ret_val[querry_item_base.field] = (querry_item_base.min, querry_item_base.max, querry_item_base.min_inclusive, querry_item_base.max_inclusive)
+                name, _ = self._get_facet_name_and_type(querry_item_base.field)
+                ret_val[name] = (querry_item_base.min, querry_item_base.max, querry_item_base.min_inclusive, querry_item_base.max_inclusive)
         return ret_val
 
     def clear_search_parameters_range(self) -> None:
@@ -425,7 +483,8 @@ class JsonConSearchAsync(JsonCon):
         Clear all search parameters range
         :return: None
         """
-        for search_param in self._search_parameters:
+        for i in range(len(self._search_parameters) - 1, -1, -1):
+            search_param = self._search_parameters[i]
             querry_item_base: JsonDtoSearchConditionBaseQuery = search_param.item
             if isinstance(querry_item_base, JsonDtoSearchConditionRangeQuery):
                 self._search_parameters.remove(search_param)
@@ -452,10 +511,14 @@ class JsonConSearchAsync(JsonCon):
             Item=JsonDtoSearchConditionBooleanQuery(
                 Items=[
                     JsonDtoSearchConditionBooleanQueryItem(
-                        Item=JsonDtoSearchConditionWildcardQuery(Term=JsonDtoSearchConditionTerm(Field="Text", Value=value)), Occur=1
+                        Item=JsonDtoSearchConditionWildcardQuery(Term=JsonDtoSearchConditionTerm(Field="TextC623975962814A5FAAD7FA1CD85DA0DB", Value=value)),
+                        Occur=1,
                     ),
                     JsonDtoSearchConditionBooleanQueryItem(
-                        Item=JsonDtoSearchConditionWildcardQuery(Term=JsonDtoSearchConditionTerm(Field="DynamicData", Value=value)), Occur=1
+                        Item=JsonDtoSearchConditionWildcardQuery(
+                            Term=JsonDtoSearchConditionTerm(Field="DynamicDataC623975962814A5FAAD7FA1CD85DA0DB", Value=value)
+                        ),
+                        Occur=1,
                     ),
                 ]
             ),
@@ -495,12 +558,12 @@ class JsonConSearchAsync(JsonCon):
                 if len(querry_item_base.items) != 2:
                     continue
                 for item in querry_item_base.items:
-                    if isinstance(item.item.term, JsonDtoSearchConditionTerm):
+                    if not isinstance(item.item.term, JsonDtoSearchConditionTerm):
                         continue
                     name, dtype = self._get_facet_name_and_type(item.item.term.field)
                     if dtype != FacedType.NO_TYPE:
                         continue
-                    if name in ["Text", "DynamicData"]:
+                    if name not in ["Text", "DynamicData"]:
                         continue
                     if possible_wildcard_name is None:
                         possible_wildcard_name = item.item.term.value
@@ -632,8 +695,9 @@ class JsonConSearchAsync(JsonCon):
         for counter in self._search_counters:
             if counter.faced_type == FacedType.NO_TYPE:
                 counter.faced_name, counter.faced_type = self._get_facet_name_and_type(counter.faced_name)
-        self._total_hits = cmd_ret.total
 
+        self._search_counters += NOT_COUNTED_SEARCH_PARAMETERS
+        self._total_hits = cmd_ret.total
         self._counters_up_to_date = True
 
     def _get_facet_name_and_type(self, indexed_name: str) -> Tuple[str, FacedType]:

@@ -70,7 +70,6 @@ class AltiumApi:
             workspace = workspace.hosting_url
         if not isinstance(workspace, str):
             return None
-        # ODO: Implement workspace login
         service_discovery_con = SoapyConServiceDiscovery(workspace)
         service_discovery_con.login(username, password)
         if not service_discovery_con.user_info:

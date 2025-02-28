@@ -61,6 +61,23 @@ def test_user_login_connection_error(mocker):
     assert mock_portal_con.login_user.called
 
 
+def test_login_workspace(mocker):
+    api = AltiumApi()
+
+    api.login = mocker.Mock()
+    api.login.return_value = True
+
+    mock_soapy_con_workspace = mocker.patch("py_altium365.altium_api.SoapyConServiceDiscovery")
+    sd_login = mocker.Mock()
+    mock_soapy_con_workspace.login = sd_login
+    sd_login.return_value.user_info = True
+    api._workspace_con = mock_soapy_con_workspace
+
+    mocker.patch("py_altium365.altium_api.AltiumApiWorkspace", return_value="test_workspace")
+
+    assert api.login_workspace("test_workspace", "test_user", "test_pass") == "test_workspace"
+
+
 def test_get_service_url_cache(mocker):
     api = AltiumApi()
 
