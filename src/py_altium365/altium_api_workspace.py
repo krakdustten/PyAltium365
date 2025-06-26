@@ -1,7 +1,9 @@
+from typing import Optional
+
 from py_altium365.connection.json_con_search_async import JsonConSearchAsync
 from py_altium365.connection.soapy_con_service_discovery import SoapyConServiceDiscovery
 from py_altium365.connection.vault.soapy_con_vault import SoapConVault
-from py_altium365.connection.vault.soapy_con_vault_base import SoapMethodOption
+from py_altium365.connection.vault.soapy_con_vault_base import AluItem, SoapMethodOption
 
 
 class AltiumApiWorkspace:
@@ -32,9 +34,11 @@ class AltiumApiWorkspace:
             raise ConnectionError("Failed to get search base URL")
         return JsonConSearchAsync(self, self._service_discovery.service_urls.SEARCHBASE, self.session_guid, self.workspace_url.strip(":443").strip("https://"))
 
-    def get_item_from_guid(self, guid: str):
-        self._vault.get_alu_items(options=[SoapMethodOption.INCLUDE_ALL_CHILD_OBJECTS])
-        return self.workspace_url
-
-
-
+    def get_item_from_guid(self, guid: str) -> Optional[AluItem]:
+        """
+        Get an item from the vault using its GUID
+        :param guid: The GUID of the item to retrieve
+        :return: A list of AluItem objects matching the GUID
+        """
+        items = self._vault.get_alu_items(options=[SoapMethodOption.INCLUDE_ALL_CHILD_OBJECTS], p_filter="GUID='" + guid + "'")
+        return items[0] if len(items) > 0 else None

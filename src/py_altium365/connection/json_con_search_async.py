@@ -3,13 +3,12 @@ from __future__ import annotations
 import re
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Dict, Generic, List, Optional, Tuple, TypeVar, Union, TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict, Generic, List, Optional, Tuple, TypeVar, Union
 
 from pydantic import BaseModel, Field
 
 from py_altium365.base.connection_handler import ConnectionHandler
 from py_altium365.connection.json_con import JsonCon, JsonRequest, JsonReturn
-
 
 if TYPE_CHECKING:
     from py_altium365.altium_api_workspace import AltiumApiWorkspace
@@ -203,8 +202,13 @@ class SearchDataBase(BaseModel):
     content_type: str = Field(alias="ContentType", default="")
 
     def get_item(self) -> Optional[str]:
+        """
+        Get the item from the Altium workspace using the item GUID.
+        :return:
+        """
         if hasattr(self.altium_workspace, "get_item_from_guid"):
             return self.altium_workspace.get_item_from_guid(self.item_guid)
+        return None
 
 
 class SearchDataType(str, Enum):

@@ -2,27 +2,26 @@ from __future__ import annotations
 
 from datetime import datetime
 from enum import Enum
-from typing import TYPE_CHECKING, Optional, List
+from typing import TYPE_CHECKING, List, Optional
 
-from pydantic_xml import element, BaseXmlModel, wrapped
+from pydantic_xml import BaseXmlModel, element, wrapped
 
 from py_altium365.base.connection_handler import ConnectionHandler
-from py_altium365.connection.soapy_con import SoapyCon, SoapMethod, SoapResponse
+from py_altium365.connection.soapy_con import SoapyCon
 
 if TYPE_CHECKING:
     from py_altium365.altium_api_workspace import AltiumApiWorkspace
 
 
 class SoapMethodOption(str, Enum):
+    """Enum for SOAP method options."""
+
     INCLUDE_ALL_CHILD_OBJECTS = "IncludeAllChildObjects=True"
 
 
-class AluObject(
-    BaseXmlModel,
-    tag="item",
-    nsmap={"temp": "http://tempuri.org/"},
-    ns="temp"
-):
+class AluObject(BaseXmlModel, tag="item", nsmap={"temp": "http://tempuri.org/"}, ns="temp"):
+    """Base class for Altium Vault objects."""
+
     guid: Optional[str] = element(tag="GUID", default=None)
     hrid: Optional[str] = element(tag="HRID", default=None)
     created_at: Optional[datetime] = element(tag="CreatedAt", default=None)
@@ -34,11 +33,15 @@ class AluObject(
 
 
 class AluShareableObject(AluObject):
+    """Base class for shareable Altium Vault objects."""
+
     sharing_control: Optional[int] = element(tag="SharingControl", default=None)
     access_rights: Optional[int] = element(tag="AccessRights", default=None)
 
 
 class AluItemRevisionParameter(AluObject):
+    """Class representing an item revision parameter in Altium Vault."""
+
     parameter_value: Optional[str] = element(tag="ParameterValue", default=None)
     item_revision_guid: Optional[str] = element(tag="ItemRevisionGUID", default=None)
     parameter_type_guid: Optional[str] = element(tag="ParameterTypeGUID", default=None)
@@ -46,6 +49,8 @@ class AluItemRevisionParameter(AluObject):
 
 
 class AluLifeCycleStateChange(AluObject):
+    """Class representing a life cycle state change in Altium Vault."""
+
     item_revision_guid: Optional[str] = element(tag="ItemRevisionGUID", default=None)
     life_cycle_state_transition_guid: Optional[str] = element(tag="LifeCycleStateTransitionGUID", default=None)
     life_cycle_state_after_guid: Optional[str] = element(tag="LifeCycleStateAfterGUID", default=None)
@@ -53,6 +58,8 @@ class AluLifeCycleStateChange(AluObject):
 
 
 class AluItemRevision(AluShareableObject, tag="item", nsmap={"temp": "http://tempuri.org/"}, ns="temp"):
+    """Class representing an item revision in Altium Vault."""
+
     revision_id: Optional[str] = element(tag="RevisionId", default=None)
     ancestor_item_revision_guid: Optional[str] = element(tag="AncestorItemRevisionGUID", default=None)
     description: Optional[str] = element(tag="Description", default=None)
@@ -64,11 +71,7 @@ class AluItemRevision(AluShareableObject, tag="item", nsmap={"temp": "http://tem
     item_description: Optional[str] = element(tag="ItemDescription", default=None)
     content_type_guid: Optional[str] = element(tag="ContentTypeGUID", default=None)
     folder_guid: Optional[str] = element(tag="FolderGUID", default=None)
-    revision_id_levels: List[str] = wrapped(
-        path="RevisionIdLevels",
-        entity=element(tag="item", default=None),
-        default=[]
-    )
+    revision_id_levels: List[str] = wrapped(path="RevisionIdLevels", entity=element(tag="item", default=None), default=[])
     revision_id_separators: List[str] = wrapped(
         path="RevisionIdSeparators",
         entity=element(tag="item", default=None),
@@ -92,6 +95,8 @@ class AluItemRevision(AluShareableObject, tag="item", nsmap={"temp": "http://tem
 
 
 class AluTag(AluObject):
+    """Class representing a tag in Altium Vault."""
+
     tag_family_guid: Optional[str] = element(tag="TagFamilyGUID", default=None)
     parant_tag_guid: Optional[str] = element(tag="ParentTagGUID", default=None)
     sub_tags: List[AluTag] = wrapped(
@@ -101,18 +106,17 @@ class AluTag(AluObject):
 
 
 class AluItemParameter(AluObject):
+    """Class representing an item parameter in Altium Vault."""
+
     parameter_value: Optional[str] = element(tag="ParameterValue", default=None)
     item_guid: Optional[str] = element(tag="ItemGUID", default=None)
     parameter_type_guid: Optional[str] = element(tag="ParameterTypeGUID", default=None)
     parameter_real_value: Optional[float] = element(tag="ParameterRealValue", default=None)
 
 
-class AluItem(
-    AluShareableObject,
-    tag="item",
-    nsmap={"temp": "http://tempuri.org/"},
-    ns="temp"
-):
+class AluItem(AluShareableObject, tag="item", nsmap={"temp": "http://tempuri.org/"}, ns="temp"):
+    """Class representing an item in Altium Vault."""
+
     description: Optional[str] = element(tag="Description", default=None)
     folder_guid: Optional[str] = element(tag="FolderGUID", default=None)
     lifecycle_definition_guid: Optional[str] = element(tag="LifeCycleDefinitionGUID", default=None)
@@ -135,8 +139,12 @@ class AluItem(
 
 
 class SoapConVaultBase(SoapyCon):
+    """Base class for SOAP connection to Altium Vault."""
+
     def __init__(self, altium_workspace: "AltiumApiWorkspace"):
+        """
+        Initialize the SOAP connection to Altium Vault.
+        :param altium_workspace: The Altium API workspace object.
+        """
         super().__init__(ConnectionHandler.get_instance(), altium_workspace.workspace_url + "/vault/?cls=soap")
         self._altium_workspace = altium_workspace
-
-

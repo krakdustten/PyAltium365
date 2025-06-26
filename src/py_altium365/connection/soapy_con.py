@@ -17,8 +17,8 @@ class SoapHeader(
 class SoapMethod(
     BaseXmlModel,
     tag="Method",
-    ns="altium",
-    nsmap={"altium": "http://altium.com/"},
+    nsmap={"temp": "http://tempuri.org/"},
+    ns="temp",
 ):
     """Base class for SOAP method."""
 
@@ -73,13 +73,13 @@ class SoapEnvelope(
 class SoapResponse(
     SoapMethod,
     tag="Response",
+    nsmap={"i": "http://www.w3.org/2001/XMLSchema-instance"},
 ):
     """Base class for SOAP response."""
 
     message: Optional[str] = element(
         tag="Message",
         ns="i",
-        nsmap={"i": "http://www.w3.org/2001/XMLSchema-instance"},
         default=None,
     )
 

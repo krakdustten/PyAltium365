@@ -8,7 +8,7 @@ def test_send_command(mocker):
     <soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/">
         <soap-env:Body>
             <Response xmlns="http://tempuri.org/">
-                <Message xmlns:i="http://www.w3.org/2001/XMLSchema-instance">message_test</Message>
+                <Message xmlns="http://www.w3.org/2001/XMLSchema-instance">message_test</Message>
             </Response>
         </soap-env:Body>
     </soap-env:Envelope>
@@ -45,10 +45,10 @@ def test_send_command(mocker):
         .replace("    ", "")
         .encode("utf-8"),
         """
-        <soap:Envelope xmlns:ns1="http://tempuri.org/" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+        <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:temp="http://tempuri.org/">
             <soap:Header />
             <soap:Body>
-                <ns1:Method />
+                <temp:Method />
             </soap:Body>
         </soap:Envelope>
         """.replace(

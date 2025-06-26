@@ -20,9 +20,9 @@ def test_init(mocker):
     service_discovery.service_urls.SEARCHBASE = "test_search_base_url"
 
     api_workspace = AltiumApiWorkspace(workspace_url, service_discovery)
-    assert api_workspace._workspace_url == workspace_url
+    assert api_workspace.workspace_url == workspace_url
     assert api_workspace._service_discovery == service_discovery
-    assert api_workspace._session_guid == service_discovery.user_info.session_id
+    assert api_workspace.session_guid == service_discovery.user_info.session_id
     assert api_workspace._service_discovery.service_urls.SEARCHBASE == "test_search_base_url"
 
 
