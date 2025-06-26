@@ -9,6 +9,7 @@ class SoapHeader(
     BaseXmlModel,
     tag="Header",
     ns="soap",
+    nsmap={"soap": "http://schemas.xmlsoap.org/soap/envelope/"},
 ):
     """Base class for SOAP header."""
 
@@ -16,8 +17,8 @@ class SoapHeader(
 class SoapMethod(
     BaseXmlModel,
     tag="Method",
-    ns="",
-    nsmap={"": "http://tempuri.org/"},
+    ns="altium",
+    nsmap={"altium": "http://altium.com/"},
 ):
     """Base class for SOAP method."""
 
@@ -72,13 +73,12 @@ class SoapEnvelope(
 class SoapResponse(
     SoapMethod,
     tag="Response",
-    ns="",
 ):
     """Base class for SOAP response."""
 
     message: Optional[str] = element(
         tag="Message",
-        ns="",
+        ns="i",
         nsmap={"i": "http://www.w3.org/2001/XMLSchema-instance"},
         default=None,
     )

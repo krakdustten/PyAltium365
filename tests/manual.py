@@ -34,6 +34,8 @@ print(so.get_all_search_names_and_type_range())
 so.add_search_parameter_range("Voltage", 1, 32, dtype=FacedType.VOLTAGE)
 
 print(so.get_current_count())
+results = so.get_results(max_amount=100)
+print(results[0].get_item())
 
 # amount = {}
 # for result in results:

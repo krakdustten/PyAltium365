@@ -1,12 +1,18 @@
+from __future__ import annotations
+
 import re
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Dict, Generic, List, Optional, Tuple, TypeVar, Union
+from typing import Dict, Generic, List, Optional, Tuple, TypeVar, Union, TYPE_CHECKING
 
 from pydantic import BaseModel, Field
 
 from py_altium365.base.connection_handler import ConnectionHandler
 from py_altium365.connection.json_con import JsonCon, JsonRequest, JsonReturn
+
+
+if TYPE_CHECKING:
+    from py_altium365.altium_api_workspace import AltiumApiWorkspace
 
 
 class FacedType(str, Enum):
@@ -158,6 +164,7 @@ class JsonSearchAsyncReturn(JsonReturn):
 class SearchDataBase(BaseModel):
     """Search data base. The base class for search data."""
 
+    altium_workspace: object
     id: str = Field(alias="Id", default="")
     parameters: Dict[str, Union[str, float]] = Field(default_factory=lambda: {}, alias="Parameters")
     hrid: str = Field(alias="HRID", default="")
@@ -195,6 +202,10 @@ class SearchDataBase(BaseModel):
     update_date: datetime = Field(alias="Update Date", default=datetime(1899, 12, 31))
     content_type: str = Field(alias="ContentType", default="")
 
+    def get_item(self) -> Optional[str]:
+        if hasattr(self.altium_workspace, "get_item_from_guid"):
+            return self.altium_workspace.get_item_from_guid(self.item_guid)
+
 
 class SearchDataType(str, Enum):
     """Search data type."""
@@ -224,7 +235,7 @@ NOT_COUNTED_SEARCH_PARAMETERS = [
 class JsonConSearchAsync(JsonCon):
     """JSON connection search async."""
 
-    def __init__(self, url: str, session_guid: str, host: str):
+    def __init__(self, altium_workspace: "AltiumApiWorkspace", url: str, session_guid: str, host: str):
         """
         Initialize the JsonConSearchAsync object
         :param url: The URL to send the JSON request to
@@ -232,6 +243,7 @@ class JsonConSearchAsync(JsonCon):
         :param host: The host for the host parameter
         """
         super().__init__(ConnectionHandler.get_instance(), url + "/v1.0/searchasync", session_guid, host)
+        self._altium_workspace = altium_workspace
         self._counters_up_to_date = False
         self._search_parameters: List[JsonDtoSearchConditionBooleanQueryItem] = []
         self._search_counters: List[JsonFacetedCounter] = []
@@ -645,7 +657,7 @@ class JsonConSearchAsync(JsonCon):
                 raise ConnectionError("Failed to get search results")
 
             for doc in cmd_ret.documents:
-                data = SearchDataBase()
+                data = SearchDataBase(altium_workspace=self._altium_workspace)
                 for field in doc.fields:
                     name, _ = self._get_facet_name_and_type(field.name)
                     value = field.value

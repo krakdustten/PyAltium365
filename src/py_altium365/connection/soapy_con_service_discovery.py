@@ -19,8 +19,8 @@ class DiscoveryLoginOption(str, Enum):
 class SoapMethodServiceDiscoveryLogin(
     SoapMethod,
     tag="Login",
-    nsmap={"": "http://altium.com/"},
-    ns="",
+    nsmap={"altium": "http://altium.com/"},
+    ns="altium",
 ):
     """SOAP method for login to the service discovery."""
 
@@ -31,14 +31,14 @@ class SoapMethodServiceDiscoveryLogin(
     product_name: str = element(tag="productName")
 
 
-class SoapEndPointInfo(BaseXmlModel, tag="EndPointInfo", ns="", nsmap={"": "http://altium.com/"}):
+class SoapEndPointInfo(BaseXmlModel, tag="EndPointInfo", ns="altium", nsmap={"altium": "http://altium.com/"}):
     """SOAP Parameter."""
 
     service_kind: str = element(tag="ServiceKind")
     service_url: Optional[str] = element(tag="ServiceUrl", default=None)
 
 
-class SoapUserParameter(BaseXmlModel, tag="UserParameter", ns="", nsmap={"": "http://altium.com/"}):
+class SoapUserParameter(BaseXmlModel, tag="UserParameter", ns="altium", nsmap={"altium": "http://altium.com/"}):
     """SOAP Parameter."""
 
     name: str = element(tag="Name")
@@ -48,8 +48,8 @@ class SoapUserParameter(BaseXmlModel, tag="UserParameter", ns="", nsmap={"": "ht
 class SoapServiceDiscoveryLoginUserInfoResult(
     BaseXmlModel,
     tag="UserInfo",
-    ns="",
-    nsmap={"": "http://altium.com/"},
+    ns="altium",
+    nsmap={"altium": "http://altium.com/"},
 ):
     """SOAP Login result for the SOAP login call in the service discovery."""
 
@@ -79,8 +79,8 @@ class SoapServiceDiscoveryLoginUserInfoResult(
 class SoapServiceDiscoveryLoginResult(
     BaseXmlModel,
     tag="LoginResult",
-    ns="",
-    nsmap={"": "http://altium.com/"},
+    ns="altium",
+    nsmap={"altium": "http://altium.com/"},
 ):
     """SOAP Login result for the SOAP login call."""
 
@@ -95,8 +95,8 @@ class SoapServiceDiscoveryLoginResult(
 class SoapServiceDiscoveryResponse(
     SoapResponse,
     tag="LoginResponse",
-    ns="",
-    nsmap={"": "http://altium.com/"},
+    ns="altium",
+    nsmap={"altium": "http://altium.com/"},
 ):
     """SOAP Login response."""
 

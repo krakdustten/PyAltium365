@@ -31,8 +31,8 @@ class SoapHeaderApi(
 class SoapMethodLogin(
     SoapMethod,
     tag="Login",
-    nsmap={"": "http://tempuri.org/"},
-    ns="",
+    nsmap={"temp": "http://tempuri.org/"},
+    ns="temp",
 ):
     """SOAP method for login."""
 
@@ -40,7 +40,7 @@ class SoapMethodLogin(
     password: str = element(tag="Password")
 
 
-class SoapProfilePicture(BaseXmlModel, tag="ProfilePicture", ns=""):
+class SoapProfilePicture(BaseXmlModel, tag="ProfilePicture"):
     """SOAP Profile picture."""
 
     small_link: Optional[str] = element(tag="Small", default=None)
@@ -49,7 +49,7 @@ class SoapProfilePicture(BaseXmlModel, tag="ProfilePicture", ns=""):
     full_link: Optional[str] = element(tag="Full", default=None)
 
 
-class SoapParameter(BaseXmlModel, tag="Parameter", ns="", nsmap={"": "http://tempuri.org/"}):
+class SoapParameter(BaseXmlModel, tag="Parameter", ns="temp", nsmap={"temp": "http://tempuri.org/"}):
     """SOAP Parameter."""
 
     name: str = element(tag="Name")
@@ -59,8 +59,8 @@ class SoapParameter(BaseXmlModel, tag="Parameter", ns="", nsmap={"": "http://tem
 class SoapLoginResult(
     BaseXmlModel,
     tag="LoginResult",
-    ns="",
-    nsmap={"i": "http://www.w3.org/2001/XMLSchema-instance", "": "http://tempuri.org/"},
+    ns="temp",
+    nsmap={"i": "http://www.w3.org/2001/XMLSchema-instance", "temp": "http://tempuri.org/"},
 ):
     """SOAP Login result for the SOAP login call."""
 
@@ -100,8 +100,8 @@ class SoapLoginResult(
 class SoapLoginResponse(
     SoapResponse,
     tag="LoginResponse",
-    ns="",
-    nsmap={"": "http://tempuri.org/"},
+    ns="temp",
+    nsmap={"temp": "http://tempuri.org/"},
 ):
     """SOAP Login response."""
 
@@ -111,8 +111,8 @@ class SoapLoginResponse(
 class SoapMethodGetPrtGlobalServiceUrl(
     SoapMethod,
     tag="GetPRT_GlobalServiceUrl",
-    nsmap={"": "http://tempuri.org/"},
-    ns="",
+    nsmap={"temp": "http://tempuri.org/"},
+    ns="temp",
 ):
     """SOAP method for getting a PRT global service URL."""
 
@@ -124,12 +124,12 @@ class SoapMethodGetPrtGlobalServiceUrl(
 class SoapGetPrtGlobalServiceUrlResponse(
     SoapResponse,
     tag="GetPRT_GlobalServiceUrlResponse",
-    ns="",
-    nsmap={"": "http://tempuri.org/"},
+    ns="temp",
+    nsmap={"temp": "http://tempuri.org/"},
 ):
     """SOAP response for getting a PRT global service URL."""
 
-    service_url: Optional[str] = element(tag="ServiceURL", nsmap={"": "http://tempuri.org/"}, default=None)
+    service_url: Optional[str] = element(tag="ServiceURL", nsmap={"temp": "http://tempuri.org/"}, default=None)
 
 
 class SoapyConPortal(SoapyCon):

@@ -16,13 +16,13 @@ from py_altium365.connection.soapy_con import (
 class SoapUserCredentials(
     BaseXmlModel,
     tag="UserCredentials",
-    ns="",
-    nsmap={"": "http://tempuri.org/"},
+    ns="temp",
+    nsmap={"temp": "http://tempuri.org/"},
 ):
     """SOAP user credentials."""
 
     user_id: Optional[int] = element(tag="userid", default=None)
-    password: str = element(tag="password", nmap={"": "http://tempuri.org/"}, ns="")
+    password: str = element(tag="password", nmap={"temp": "http://tempuri.org/"}, ns="temp")
 
 
 class SoapHeaderCredentials(
@@ -38,13 +38,13 @@ class SoapHeaderCredentials(
 class SoapMethodGetUserWorkspaces(
     SoapMethod,
     tag="GetUserWorkspaces",
-    nsmap={"": "http://tempuri.org/"},
-    ns="",
+    nsmap={"temp": "http://tempuri.org/"},
+    ns="temp",
 ):
     """SOAP method for login."""
 
 
-class UserWorkspaceInfo(BaseXmlModel, tag="UserWorkspaceInfo", ns="", nsmap={"": "http://tempuri.org/"}):
+class UserWorkspaceInfo(BaseXmlModel, tag="UserWorkspaceInfo", ns="temp", nsmap={"temp": "http://tempuri.org/"}):
     """User workspace information."""
 
     workspace_id: int = element(tag="workspaceid")
@@ -78,8 +78,8 @@ class UserWorkspaceInfo(BaseXmlModel, tag="UserWorkspaceInfo", ns="", nsmap={"":
 class SoapGetUserWorkspacesResult(
     BaseXmlModel,
     tag="GetUserWorkspacesResult",
-    ns="",
-    nsmap={"": "http://tempuri.org/"},
+    ns="temp",
+    nsmap={"temp": "http://tempuri.org/"},
 ):
     """SOAP Login result for the SOAP login call."""
 
@@ -89,8 +89,8 @@ class SoapGetUserWorkspacesResult(
 class SoapGetUserWorkspacesResponse(
     SoapResponse,
     tag="GetUserWorkspacesResponse",
-    nsmap={"": "http://tempuri.org/"},
-    ns="",
+    nsmap={"temp": "http://tempuri.org/"},
+    ns="temp",
 ):
     """SOAP method for login."""
 
