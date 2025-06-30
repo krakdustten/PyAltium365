@@ -1,2 +1,38 @@
 [tool.black]
 line-length = 160
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "PyAltium365"
+version = "0.5.1"
+description = "an library that can interface with altium 365"
+readme = "README.md"
+requires-python = ">=3.8"
+#dependancies = [
+#    "requests>=2",
+#    "pydantic>=2.0.0",
+#    "pydantic-xml>=2.14.0",
+#]
+license = "MIT AND (Apache-2.0 OR BSD-2-Clause)"
+authors = [
+    {name = "Dylan Gybels", email = "gybelsdylan@gmail.com"}
+]
+keywords = ["altium", "altium365", "altium-365", "altium-365-api", "altium-365-api-python", "altium-365-api-python-client"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+[project.urls]
+Homepage = "https://github.com/krakdustten/PyAltium365"
+
