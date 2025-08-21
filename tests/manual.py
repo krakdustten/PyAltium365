@@ -22,6 +22,8 @@ cws = api.login_workspace(ws[1], user_name, password)
 if cws is None:
     raise ValueError("Failed to login to workspace")
 
+cws.get_all_folders()
+
 so = cws.create_search_object()
 # so.add_search_parameter("Voltage", "16v")
 print(so.get_current_count())
@@ -36,6 +38,8 @@ so.add_search_parameter_range("Voltage", 1, 32, dtype=FacedType.VOLTAGE)
 print(so.get_current_count())
 results = so.get_results(max_amount=100)
 print(results[0].get_item())
+
+
 
 # amount = {}
 # for result in results:

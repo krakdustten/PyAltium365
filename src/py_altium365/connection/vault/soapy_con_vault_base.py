@@ -17,6 +17,8 @@ class SoapMethodOption(str, Enum):
     """Enum for SOAP method options."""
 
     INCLUDE_ALL_CHILD_OBJECTS = "IncludeAllChildObjects=True"
+    EXCLUDE_ACL_ENTRIES = "ExcludeACLEntries=True"
+    SUPPORT_OWNER_ACL_TYPE = "SupportOwnerAclType=True"
 
 
 class AluObject(BaseXmlModel, tag="item", nsmap={"temp": "http://tempuri.org/"}, ns="temp"):
@@ -135,6 +137,35 @@ class AluItem(AluShareableObject, tag="item", nsmap={"temp": "http://tempuri.org
         path="ItemParameters",
         default=[],
     )
+    is_active: bool = element(tag="IsActive", default=False)
+
+
+class AluFolderParameter(AluObject):
+    """Class representing an item parameter in Altium Vault."""
+
+    folder_guid: Optional[str] = element(tag="FolderGUID", default=None)
+    default_value: Optional[str] = element(tag="DefaultValue", default=None)
+
+
+class AluFolder(AluShareableObject, tag="item", nsmap={"temp": "http://tempuri.org/"}, ns="temp"):
+    """Class representing a folder in Altium Vault."""
+
+    description: Optional[str] = element(tag="Description", default=None)
+    shared_name: Optional[str] = element(tag="SharedName", default=None)
+    is_shared: bool = element(tag="IsShared", default=False)
+    folder_type_guid: Optional[str] = element(tag="FolderTypeGUID", default=None)
+    parent_folder_guid: Optional[str] = element(tag="ParentFolderGUID", default=None)
+    facet_count: Optional[int] = element(tag="FacetCount", default=None)
+    attributes: Optional[int] = element(tag="Attributes", default=None)
+    folder_parameters: List[AluFolderParameter] = wrapped(
+        path="FolderParameters",
+        default=[],
+    )
+    sub_folders: List[AluFolder] = wrapped(
+        path="SubFolders",
+        default=[],
+    )
+    weight: Optional[int] = element(tag="Weight", default=None)
     is_active: bool = element(tag="IsActive", default=False)
 
 

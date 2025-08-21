@@ -42,3 +42,10 @@ class AltiumApiWorkspace:
         """
         items = self._vault.get_alu_items(options=[SoapMethodOption.INCLUDE_ALL_CHILD_OBJECTS], p_filter="GUID='" + guid + "'")
         return items[0] if len(items) > 0 else None
+
+    def get_all_folders(self):
+        """
+        Get all folders in the vault
+        :return: A list of AluItem objects representing the folders
+        """
+        return self._vault.get_alu_folders(options=[SoapMethodOption.INCLUDE_ALL_CHILD_OBJECTS])
