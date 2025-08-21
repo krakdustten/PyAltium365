@@ -11,12 +11,11 @@ nox.options.reuse_existing_virtualenvs = False
 
 
 @nox.session(
-    python=['3.8', '3.9', '3.10', '3.11', '3.12', '3.13'],
+    python=['3.9', '3.10', '3.11', '3.12', '3.13'],
 )
 def tests(session):
     session.install("-e", ".")  # Install the package in the virtualenv
     session.install('-r', 'requirements.txt')
-    session.install('-r', 'requirements-dev.txt')
     session.run('pytest')
 
 
@@ -24,7 +23,6 @@ def tests(session):
 def coverage(session):
     session.install("-e", ".")  # Install the package in the virtualenv
     session.install('-r', 'requirements.txt')
-    session.install('-r', 'requirements-dev.txt')
     session.install("coverage")
     session.run("coverage", 'run', '-m', 'pytest')
     session.run("coverage", 'report')
@@ -48,7 +46,7 @@ def lint(session):
 @nox.session
 def type_check(session):
     session.install("-e", ".")  # Install the package in the virtualenv
-    session.install('-r', 'requirements-dev.txt')
+    session.install('-r', 'requirements.txt')
     session.install('mypy')
     session.run('mypy', '--install-types', '--non-interactive')
     session.run('mypy', 'src', 'tests')
@@ -57,8 +55,8 @@ def type_check(session):
 @nox.session
 def docs(session):
     session.install("-e", ".")  # Install the package in the virtualenv
-    session.install('sphinx')
-    session.run('sphinx-build', '-b', 'html', 'docs/', 'build/docs')
+    session.install('pydoctor')
+    session.run('pydoctor')
 
 
 @nox.session

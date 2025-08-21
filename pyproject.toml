@@ -1,6 +1,9 @@
 [tool.black]
 line-length = 160
 
+[tool.pydoctor]
+add-package = ["src/py_altium365"]
+
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
@@ -10,12 +13,12 @@ name = "PyAltium365"
 version = "0.5.1"
 description = "an library that can interface with altium 365"
 readme = "README.md"
-requires-python = ">=3.8"
-#dependancies = [
-#    "requests>=2",
-#    "pydantic>=2.0.0",
-#    "pydantic-xml>=2.14.0",
-#]
+requires-python = ">=3.9"
+dependencies  = [
+    "requests>=2",
+    "pydantic>=2.0.0",
+    "pydantic-xml>=2.14.0",
+]
 license = "MIT AND (Apache-2.0 OR BSD-2-Clause)"
 authors = [
     {name = "Dylan Gybels", email = "gybelsdylan@gmail.com"}
@@ -25,7 +28,6 @@ classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Intended Audience :: Developers",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
