@@ -4,7 +4,7 @@ from datetime import datetime
 from enum import Enum
 from typing import TYPE_CHECKING, List, Optional
 
-from pydantic_xml import BaseXmlModel, element, wrapped, attr
+from pydantic_xml import BaseXmlModel, element, wrapped
 
 from py_altium365.base.connection_handler import ConnectionHandler
 from py_altium365.connection.soapy_con import SoapyCon

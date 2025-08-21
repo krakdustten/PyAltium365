@@ -40,7 +40,6 @@ results = so.get_results(max_amount=100)
 print(results[0].get_item())
 
 
-
 # amount = {}
 # for result in results:
 #     for param_name in result.parameters:

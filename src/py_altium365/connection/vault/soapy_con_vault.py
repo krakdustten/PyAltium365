@@ -6,9 +6,10 @@ from pydantic_xml import element, wrapped
 
 from py_altium365.connection.soapy_con import SoapMethod, SoapResponse
 from py_altium365.connection.vault.soapy_con_vault_base import (
+    AluFolder,
     AluItem,
     SoapConVaultBase,
-    SoapMethodOption, AluFolder,
+    SoapMethodOption,
 )
 
 if TYPE_CHECKING:
@@ -46,6 +47,7 @@ class SoapResponseVaultGetAluItems(
         default=[],
     )
 
+
 class SoapMethodVaultGetAluFolders(
     SoapMethod,
     tag="GetALU_Folders",
@@ -61,6 +63,7 @@ class SoapMethodVaultGetAluFolders(
         entity=element(tag="item"),
         default=[],
     )
+
 
 class SoapResponseVaultGetAluFolders(
     SoapResponse,
@@ -111,4 +114,3 @@ class SoapConVault(SoapConVaultBase):
             return_method=SoapResponseVaultGetAluFolders,
         )
         return response.records
-

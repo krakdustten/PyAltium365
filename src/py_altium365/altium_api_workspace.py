@@ -3,7 +3,11 @@ from typing import Optional
 from py_altium365.connection.json_con_search_async import JsonConSearchAsync
 from py_altium365.connection.soapy_con_service_discovery import SoapyConServiceDiscovery
 from py_altium365.connection.vault.soapy_con_vault import SoapConVault
-from py_altium365.connection.vault.soapy_con_vault_base import AluItem, SoapMethodOption, AluFolder
+from py_altium365.connection.vault.soapy_con_vault_base import (
+    AluFolder,
+    AluItem,
+    SoapMethodOption,
+)
 
 
 class AltiumApiWorkspace:
@@ -49,6 +53,8 @@ class AltiumApiWorkspace:
         :param folder: An AluFolder object representing the folder to retrieve items from
         :return: A list of AluItem objects in the specified folder
         """
+        if folder.guid is None:
+            return []
         return self._vault.get_alu_items(options=[SoapMethodOption.INCLUDE_ALL_CHILD_OBJECTS], p_filter="FolderGUID='" + folder.guid + "'")
 
     def get_all_folders(self) -> list[AluFolder]:
@@ -73,4 +79,6 @@ class AltiumApiWorkspace:
         :param folder: An AluFolder object representing the folder to retrieve subfolders from
         :return: A list of AluFolder objects in the specified folder
         """
+        if folder.guid is None:
+            return []
         return self._vault.get_alu_folders(options=[SoapMethodOption.INCLUDE_ALL_CHILD_OBJECTS], p_filter="ParentFolderGUID='" + folder.guid + "'")
