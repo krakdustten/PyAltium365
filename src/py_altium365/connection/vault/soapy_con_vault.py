@@ -96,7 +96,7 @@ class SoapConVault(SoapConVaultBase):
         )
         return response.records
 
-    def get_alu_folders(self, p_filter: Optional[str] = None, options: Optional[List[SoapMethodOption]] = None):
+    def get_alu_folders(self, p_filter: Optional[str] = None, options: Optional[List[SoapMethodOption]] = None) -> List[AluFolder]:
         """
         Get ALU folders from the vault.
         :param p_filter: Optional filter string to apply to the query.

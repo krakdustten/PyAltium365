@@ -4,7 +4,7 @@ from datetime import datetime
 from enum import Enum
 from typing import TYPE_CHECKING, List, Optional
 
-from pydantic_xml import BaseXmlModel, element, wrapped
+from pydantic_xml import BaseXmlModel, element, wrapped, attr
 
 from py_altium365.base.connection_handler import ConnectionHandler
 from py_altium365.connection.soapy_con import SoapyCon
@@ -139,6 +139,16 @@ class AluItem(AluShareableObject, tag="item", nsmap={"temp": "http://tempuri.org
     )
     is_active: bool = element(tag="IsActive", default=False)
 
+    def get_folder(self, altium_workspace: "AltiumApiWorkspace") -> Optional[AluFolder]:
+        """
+        Get the folder associated with this item.
+        :param altium_workspace: The Altium API workspace object.
+        :return: An AluFolder object if found, otherwise None.
+        """
+        if self.folder_guid:
+            return altium_workspace.get_folder_from_guid(self.folder_guid)
+        return None
+
 
 class AluFolderParameter(AluObject):
     """Class representing an item parameter in Altium Vault."""
@@ -167,6 +177,32 @@ class AluFolder(AluShareableObject, tag="item", nsmap={"temp": "http://tempuri.o
     )
     weight: Optional[int] = element(tag="Weight", default=None)
     is_active: bool = element(tag="IsActive", default=False)
+
+    def get_parent_folder(self, altium_workspace: "AltiumApiWorkspace") -> Optional[AluFolder]:
+        """
+        Get the parent folder of this folder.
+        :param altium_workspace: The Altium API workspace object.
+        :return: An AluFolder object if found, otherwise None.
+        """
+        if self.parent_folder_guid:
+            return altium_workspace.get_folder_from_guid(self.parent_folder_guid)
+        return None
+
+    def get_child_folders(self, altium_workspace: "AltiumApiWorkspace") -> List[AluFolder]:
+        """
+        Get all child folders of this folder.
+        :param altium_workspace: The Altium API workspace object.
+        :return: A list of AluFolder objects representing the child folders.
+        """
+        return altium_workspace.get_folders_in_folder(self)
+
+    def get_items(self, altium_workspace: "AltiumApiWorkspace") -> List[AluItem]:
+        """
+        Get all items in this folder.
+        :param altium_workspace: The Altium API workspace object.
+        :return: A list of AluItem objects in this folder.
+        """
+        return altium_workspace.get_items_in_folder(self)
 
 
 class SoapConVaultBase(SoapyCon):
